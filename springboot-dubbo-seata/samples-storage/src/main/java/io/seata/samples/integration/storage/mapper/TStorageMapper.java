@@ -20,4 +20,6 @@ public interface TStorageMapper extends BaseMapper<TStorage> {
      * @Return:
      */
     int decreaseStorage(@Param("commodityCode") String commodityCode, @Param("count") Integer count);
+
+    int insertOne(TStorage tStorage);
 }

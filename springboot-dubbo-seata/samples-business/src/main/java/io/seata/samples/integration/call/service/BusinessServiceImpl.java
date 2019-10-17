@@ -36,7 +36,7 @@ public class BusinessServiceImpl implements BusinessService{
      * @Return:
      */
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-gts-seata-example")
+    @GlobalTransactional(timeoutMills = 10000, name = "dubbo-gts-seata-example")
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         System.out.println("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
@@ -45,6 +45,7 @@ public class BusinessServiceImpl implements BusinessService{
         commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
         commodityDTO.setCount(businessDTO.getCount());
         ObjectResponse storageResponse = storageDubboService.decreaseStorage(commodityDTO);
+
         //2、创建订单
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setUserId(businessDTO.getUserId());
@@ -54,9 +55,9 @@ public class BusinessServiceImpl implements BusinessService{
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
-//        if (!flag) {
-//            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-//        }
+        if (!flag) {
+            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+        }
 
         if (storageResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);

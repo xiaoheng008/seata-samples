@@ -1,6 +1,7 @@
 package io.seata.samples.integration.call.controller;
 
 import io.seata.samples.integration.call.service.BusinessService;
+import io.seata.samples.integration.call.service.CountService;
 import io.seata.samples.integration.common.dto.BusinessDTO;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.IntStream;
 
 /**
  * @Author: heshouyou
@@ -28,6 +31,9 @@ public class BusinessController {
     @Autowired
     private BusinessService businessService;
 
+    @Autowired
+    private CountService countService;
+
     /**
      * 模拟用户购买商品下单业务逻辑流程
      * @Param:
@@ -36,6 +42,24 @@ public class BusinessController {
     @PostMapping("/buy")
     ObjectResponse handleBusiness(@RequestBody BusinessDTO businessDTO){
         LOGGER.info("请求参数：{}",businessDTO.toString());
-        return businessService.handleBusiness(businessDTO);
+
+        IntStream.rangeClosed(1,1000)
+                .parallel()
+                .forEach(i -> {
+                    long start = System.currentTimeMillis();
+                    try {
+                        Thread.sleep(i);
+                        ObjectResponse objectResponse = businessService.handleBusiness(businessDTO);
+                        countService.success(System.currentTimeMillis() - start);
+                    }catch (Exception e) {
+                        countService.failure(System.currentTimeMillis() - start);
+                        e.printStackTrace();
+                    }
+
+                });
+
+        System.out.println(countService.toString());
+
+        return new ObjectResponse();
     }
 }

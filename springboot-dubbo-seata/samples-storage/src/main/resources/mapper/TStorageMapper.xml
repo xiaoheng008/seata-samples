@@ -19,7 +19,12 @@
     </sql>
 
     <update id="decreaseStorage">
-        update t_storage set count = count-${count} where commodity_code = #{commodityCode}
+        update t_storage set count = count-${count} where commodity_code = #{commodityCode} and count >= #{count}
     </update>
+
+    <insert id="insertOne" parameterType="io.seata.samples.integration.storage.entity.TStorage">
+        insert into t_storage
+        (id, commodity_code, name, count) values (#{id}, #{commodityCode}, #{name}, #{count})
+    </insert>
 
 </mapper>

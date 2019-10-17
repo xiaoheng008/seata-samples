@@ -37,11 +37,6 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
     @Override
     public ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
-        //扣减用户账户
-        AccountDTO accountDTO = new AccountDTO();
-        accountDTO.setUserId(orderDTO.getUserId());
-        accountDTO.setAmount(orderDTO.getOrderAmount());
-        ObjectResponse objectResponse = accountDubboService.decreaseAccount(accountDTO);
 
         //生成订单号
         orderDTO.setOrderNo(UUID.randomUUID().toString().replace("-",""));
@@ -57,6 +52,12 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
             response.setMessage(RspStatusEnum.FAIL.getMessage());
             return response;
         }
+
+        //扣减用户账户
+        AccountDTO accountDTO = new AccountDTO();
+        accountDTO.setUserId(orderDTO.getUserId());
+        accountDTO.setAmount(orderDTO.getOrderAmount());
+        ObjectResponse objectResponse = accountDubboService.decreaseAccount(accountDTO);
 
         if (objectResponse.getStatus() != 200) {
             response.setStatus(RspStatusEnum.FAIL.getCode());

@@ -17,10 +17,15 @@
         id, user_id, amount
     </sql>
     <update id="decreaseAccount">
-      update t_account set amount = amount-${amount} where user_id = #{userId}
+      update t_account set amount = amount-${amount} where user_id = #{userId} and amount >= #{amount}
     </update>
     <update id="testGlobalLock">
       select * from t_account where user_id = #{userId} for update
     </update>
+
+    <insert id="insertOne" parameterType="io.seata.samples.integration.account.entity.TAccount">
+        insert into t_account
+        (user_id, amount) values (#{userId}, #{amount})
+    </insert>
 
 </mapper>
