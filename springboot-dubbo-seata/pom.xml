@@ -48,10 +48,30 @@
         <spring.version>5.0.8.RELEASE</spring.version>
         <dubbo.version>2.6.7</dubbo.version>
         <nacos-client.verison>1.0.0</nacos-client.verison>
+
+        <slf4j.version>1.7.26</slf4j.version>
+        <logback.classic.version>1.2.3</logback.classic.version>
+        <commons.log.version>1.2</commons.log.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons.log.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.classic.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
@@ -152,10 +172,6 @@
             <version>${dubbo.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

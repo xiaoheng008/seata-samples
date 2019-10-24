@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 /**
  * <p>
  *  服务实现类
@@ -25,6 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class TAccountServiceImpl extends ServiceImpl<TAccountMapper, TAccount> implements ITAccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(TAccountServiceImpl.class);
+
+    @PostConstruct
+    public void init() {
+        logger.info("TAccountServiceImpt#decreaseAccount | 扣钱");
+    }
 
     @Override
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
