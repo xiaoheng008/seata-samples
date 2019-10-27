@@ -9,6 +9,12 @@ import java.io.Serializable;
 public class ObjectResponse<T> extends BaseResponse implements Serializable {
     private T data;
 
+    public ObjectResponse() { }
+
+    public ObjectResponse(T data) {
+        this.data = data;
+    }
+
     public T getData() {
         return data;
     }

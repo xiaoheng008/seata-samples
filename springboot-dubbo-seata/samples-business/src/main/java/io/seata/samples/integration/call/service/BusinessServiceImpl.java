@@ -40,11 +40,11 @@ public class BusinessServiceImpl implements BusinessService{
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         System.out.println("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
-        //1、扣减库存
-        CommodityDTO commodityDTO = new CommodityDTO();
-        commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
-        commodityDTO.setCount(businessDTO.getCount());
-        ObjectResponse storageResponse = storageDubboService.decreaseStorage(commodityDTO);
+        //1、扣减库存 暂时不要库存，只要创建订单跟扣钱 2019-10-28
+//        CommodityDTO commodityDTO = new CommodityDTO();
+//        commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
+//        commodityDTO.setCount(businessDTO.getCount());
+//        ObjectResponse storageResponse = storageDubboService.decreaseStorage(commodityDTO);
 
         //2、创建订单
         OrderDTO orderDTO = new OrderDTO();
@@ -55,11 +55,12 @@ public class BusinessServiceImpl implements BusinessService{
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
-        if (!flag) {
-            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-        }
+//        if (!flag) {
+//            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+//        }
 
-        if (storageResponse.getStatus() != 200 || response.getStatus() != 200) {
+//        storageResponse.getStatus() != 200 ||
+        if (response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }
 

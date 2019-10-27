@@ -49,18 +49,13 @@
         <dubbo.version>2.6.7</dubbo.version>
         <nacos-client.verison>1.0.0</nacos-client.verison>
 
+        <!--这是一套日志 slf4j是日志接口，logback是日志实现-->
         <slf4j.version>1.7.26</slf4j.version>
         <logback.classic.version>1.2.3</logback.classic.version>
-        <commons.log.version>1.2</commons.log.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>${commons.log.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>

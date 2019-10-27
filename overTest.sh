@@ -55,12 +55,12 @@ do
     case "$1" in
         -m)
             echo "打包工程"
-#            cd "${projectDir}"
+            cd "${projectDir}"
             mvn clean package -DskipTests -T 1C
             ;;
         -i)
             echo "安装工程"
-#            cd "${projectDir}"
+            cd "${projectDir}"
             mvn clean install -U -DskipTests
             ;;
         -all)

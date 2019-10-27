@@ -40,26 +40,19 @@ public class BusinessController {
      * @Return:
      */
     @PostMapping("/buy")
-    ObjectResponse handleBusiness(@RequestBody BusinessDTO businessDTO){
+    public ObjectResponse handleBusiness(@RequestBody BusinessDTO businessDTO){
         LOGGER.info("请求参数：{}",businessDTO.toString());
 
-        IntStream.rangeClosed(1,1000)
-                .parallel()
-                .forEach(i -> {
-                    long start = System.currentTimeMillis();
-                    try {
-                        Thread.sleep(i);
-                        ObjectResponse objectResponse = businessService.handleBusiness(businessDTO);
-                        countService.success(System.currentTimeMillis() - start);
-                    }catch (Exception e) {
-                        countService.failure(System.currentTimeMillis() - start);
-                        e.printStackTrace();
-                    }
+        long start = System.currentTimeMillis();
+        ObjectResponse objectResponse = null;
+        try {
+            objectResponse = businessService.handleBusiness(businessDTO);
+            countService.success(System.currentTimeMillis() - start);
+        }catch (Exception e) {
+            countService.failure(System.currentTimeMillis() - start);
+            e.printStackTrace();
+        }
 
-                });
-
-        System.out.println(countService.toString());
-
-        return new ObjectResponse();
+        return new ObjectResponse(objectResponse);
     }
 }
