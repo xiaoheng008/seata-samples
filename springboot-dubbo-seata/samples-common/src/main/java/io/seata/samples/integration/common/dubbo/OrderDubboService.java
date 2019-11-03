@@ -14,4 +14,8 @@ public interface OrderDubboService {
      * 创建订单
      */
     ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO);
+
+
+    ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO);
+
 }

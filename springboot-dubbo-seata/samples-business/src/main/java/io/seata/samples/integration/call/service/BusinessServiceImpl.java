@@ -12,6 +12,8 @@ import io.seata.samples.integration.common.enums.RspStatusEnum;
 import io.seata.samples.integration.common.exception.DefaultException;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BusinessServiceImpl implements BusinessService{
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Reference(version = "1.0.0")
     private StorageDubboService storageDubboService;
@@ -55,11 +59,41 @@ public class BusinessServiceImpl implements BusinessService{
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
-//        if (!flag) {
-//            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-//        }
+        if (businessDTO.isFlag()) {
+            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+        }
 
 //        storageResponse.getStatus() != 200 ||
+        if (response.getStatus() != 200) {
+            throw new DefaultException(RspStatusEnum.FAIL);
+        }
+
+        objectResponse.setStatus(RspStatusEnum.SUCCESS.getCode());
+        objectResponse.setMessage(RspStatusEnum.SUCCESS.getMessage());
+        objectResponse.setData(response.getData());
+        return objectResponse;
+    }
+
+    /**
+     * 处理业务逻辑
+     * @Param:
+     * @Return:
+     */
+    @Override
+    public ObjectResponse handleBusiness2(BusinessDTO businessDTO) {
+        ObjectResponse<Object> objectResponse = new ObjectResponse<>();
+
+        //2、创建订单
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setUserId(businessDTO.getUserId());
+        orderDTO.setCommodityCode(businessDTO.getCommodityCode());
+        orderDTO.setOrderCount(businessDTO.getCount());
+        orderDTO.setOrderAmount(businessDTO.getAmount());
+        orderDTO.setFlag(businessDTO.isFlag());
+        logger.info("准备创建订单");
+        ObjectResponse<OrderDTO> response = orderDubboService.createOrder2(orderDTO);
+        logger.info("创建完订单");
+
         if (response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }

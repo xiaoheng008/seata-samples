@@ -9,6 +9,16 @@ import java.io.Serializable;
 public class ObjectResponse<T> extends BaseResponse implements Serializable {
     private T data;
 
+    private long time;
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
     public ObjectResponse() { }
 
     public ObjectResponse(T data) {

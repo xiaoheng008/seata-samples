@@ -44,15 +44,50 @@ public class BusinessController {
         LOGGER.info("请求参数：{}",businessDTO.toString());
 
         long start = System.currentTimeMillis();
-        ObjectResponse objectResponse = null;
+        ObjectResponse objectResponse = new ObjectResponse();
         try {
             objectResponse = businessService.handleBusiness(businessDTO);
-            countService.success(System.currentTimeMillis() - start);
+//            countService.success(System.currentTimeMillis() - start);
         }catch (Exception e) {
-            countService.failure(System.currentTimeMillis() - start);
-            e.printStackTrace();
+//            countService.failure(System.currentTimeMillis() - start);
+//            e.printStackTrace();
         }
+        long use = System.currentTimeMillis() - start;
+        objectResponse.setTime(use);
+        LOGGER.info("分布式事务执行时间: {}", use);
 
-        return new ObjectResponse(objectResponse);
+        return objectResponse;
+    }
+
+    /**
+     * 模拟用户购买商品下单业务逻辑流程 单机版
+     * @Param:
+     * @Return:
+     */
+    @PostMapping("/buy2")
+    public ObjectResponse handleBusiness2(@RequestBody BusinessDTO businessDTO){
+        LOGGER.info("请求参数：{}",businessDTO.toString());
+
+        long start = System.currentTimeMillis();
+        ObjectResponse objectResponse = new ObjectResponse();
+        try {
+            objectResponse = businessService.handleBusiness2(businessDTO);
+//            countService.success(System.currentTimeMillis() - start);
+        }catch (Exception e) {
+//            countService.failure(System.currentTimeMillis() - start);
+//            LOGGER.error("请求失败：{}",e);
+        }
+        long use = System.currentTimeMillis() - start;
+        objectResponse.setTime(use);
+        LOGGER.info("单机事务执行时间: {}", use);
+
+        return objectResponse;
+    }
+
+    @PostMapping("/test")
+    public ObjectResponse test(@RequestBody BusinessDTO businessDTO){
+        LOGGER.info("请求参数：{}",businessDTO.toString());
+
+        return new ObjectResponse();
     }
 }

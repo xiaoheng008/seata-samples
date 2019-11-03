@@ -19,4 +19,6 @@ public interface ITOrderService extends IService<TOrder> {
      * 创建订单
      */
     ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO);
+
+    ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO);
 }

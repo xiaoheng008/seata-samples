@@ -23,6 +23,16 @@ public class OrderDTO implements Serializable {
 
     private BigDecimal orderAmount;
 
+    private boolean flag = false;
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
