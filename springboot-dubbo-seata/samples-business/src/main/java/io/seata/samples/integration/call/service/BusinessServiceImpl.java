@@ -1,10 +1,8 @@
 package io.seata.samples.integration.call.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-
 import io.seata.core.context.RootContext;
 import io.seata.samples.integration.common.dto.BusinessDTO;
-import io.seata.samples.integration.common.dto.CommodityDTO;
 import io.seata.samples.integration.common.dto.OrderDTO;
 import io.seata.samples.integration.common.dubbo.OrderDubboService;
 import io.seata.samples.integration.common.dubbo.StorageDubboService;
@@ -21,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @Description  Dubbo业务发起方逻辑
  * @Date Created in 2019/1/14 18:36
  */
-@Service
+@Service("businessService")
 public class BusinessServiceImpl implements BusinessService{
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -60,7 +58,18 @@ public class BusinessServiceImpl implements BusinessService{
 
         //打开注释测试事务发生异常后，全局回滚功能
         if (businessDTO.isFlag()) {
+            try {
+                Thread.sleep(12000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+        }else{
+            try {
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 //        storageResponse.getStatus() != 200 ||
@@ -80,6 +89,7 @@ public class BusinessServiceImpl implements BusinessService{
      * @Return:
      */
     @Override
+    @GlobalTransactional(timeoutMills = 10000, name = "dubbo-gts-seata-example")
     public ObjectResponse handleBusiness2(BusinessDTO businessDTO) {
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
 

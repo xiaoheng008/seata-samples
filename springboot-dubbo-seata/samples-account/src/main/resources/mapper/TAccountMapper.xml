@@ -28,4 +28,6 @@
         (user_id, amount) values (#{userId}, #{amount})
     </insert>
 
+
+
 </mapper>

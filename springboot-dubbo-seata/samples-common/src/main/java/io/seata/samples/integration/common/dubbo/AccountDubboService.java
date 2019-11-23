@@ -14,4 +14,6 @@ public interface AccountDubboService {
      * 从账户扣钱
      */
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
+
+    ObjectResponse tccDecreaseAccount(AccountDTO accountDTO);
 }

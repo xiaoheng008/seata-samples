@@ -28,13 +28,15 @@ public class TOrderController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TOrderController.class);
 
 
-    @Autowired
-    private ITOrderService orderService;
+//    @Autowired
+//    private ITOrderService orderService;
 
     @PostMapping("/create_order")
     ObjectResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
         LOGGER.info("请求订单微服务：{}",orderDTO.toString());
-        return orderService.createOrder(orderDTO);
+//        return orderService.createOrder(orderDTO);
+
+        return null;
     }
 }
 

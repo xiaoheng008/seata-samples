@@ -18,4 +18,6 @@ public interface OrderDubboService {
 
     ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO);
 
+    ObjectResponse<OrderDTO> tccCreateOrder(OrderDTO orderDTO);
+
 }

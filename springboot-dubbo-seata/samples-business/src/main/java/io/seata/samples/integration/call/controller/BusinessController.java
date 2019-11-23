@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.IntStream;
-
 /**
  * @Author: heshouyou
  * @Description  Dubbo业务执行入口
@@ -32,7 +30,16 @@ public class BusinessController {
     private BusinessService businessService;
 
     @Autowired
+    private BusinessService tccBusinessService;
+
+    @Autowired
     private CountService countService;
+
+    @PostMapping("/tccbuy")
+    public ObjectResponse tcc(@RequestBody BusinessDTO businessDTO) {
+        ObjectResponse objectResponse = tccBusinessService.handleBusiness(businessDTO);
+        return objectResponse;
+    }
 
     /**
      * 模拟用户购买商品下单业务逻辑流程
@@ -50,11 +57,15 @@ public class BusinessController {
 //            countService.success(System.currentTimeMillis() - start);
         }catch (Exception e) {
 //            countService.failure(System.currentTimeMillis() - start);
-//            e.printStackTrace();
+            //如果不会滚的情况下报错了，要打印
+            if(!businessDTO.isFlag()){
+                LOGGER.error("请求失败：{}",e);
+            }
+
         }
         long use = System.currentTimeMillis() - start;
         objectResponse.setTime(use);
-        LOGGER.info("分布式事务执行时间: {}", use);
+        LOGGER.info("分布式事务执行时间: {}, flag: {}", use, businessDTO.isFlag());
 
         return objectResponse;
     }
@@ -75,11 +86,14 @@ public class BusinessController {
 //            countService.success(System.currentTimeMillis() - start);
         }catch (Exception e) {
 //            countService.failure(System.currentTimeMillis() - start);
-//            LOGGER.error("请求失败：{}",e);
+            //如果不会滚的情况下报错了，要打印
+            if(!businessDTO.isFlag()){
+                LOGGER.error("请求失败：{}",e);
+            }
         }
         long use = System.currentTimeMillis() - start;
         objectResponse.setTime(use);
-        LOGGER.info("单机事务执行时间: {}", use);
+        LOGGER.info("单机事务执行时间: {}, flag: {}", use, businessDTO.isFlag());
 
         return objectResponse;
     }

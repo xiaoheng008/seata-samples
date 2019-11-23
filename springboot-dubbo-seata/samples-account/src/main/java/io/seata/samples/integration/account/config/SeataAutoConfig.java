@@ -9,12 +9,15 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * @Author: heshouyou
@@ -63,14 +66,25 @@ public class SeataAutoConfig {
      * @Param: druidDataSource  datasource bean instance
      * @Return: DataSourceProxy  datasource proxy
      */
-    @Bean
-    public DataSourceProxy dataSourceProxy(DruidDataSource druidDataSource){
-        return new DataSourceProxy(druidDataSource);
-    }
+//    @Bean
+//    public DataSourceProxy dataSourceProxy(DruidDataSource druidDataSource){
+//        return new DataSourceProxy(druidDataSource);
+//    }
 
-    @Bean
-    public DataSourceTransactionManager transactionManager(DataSourceProxy dataSourceProxy) {
-        return new DataSourceTransactionManager(dataSourceProxy);
+//    @Bean
+//    public DataSourceTransactionManager transactionManager(DataSourceProxy dataSourceProxy) {
+//        return new DataSourceTransactionManager(dataSourceProxy);
+//    }
+
+    @Bean(name = "sqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactoryBean(@Qualifier("dataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+//        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis/mybatis-config.xml"));
+        sqlSessionFactoryBean.setTypeAliasesPackage("io.seata.samples.integration.order");
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
+        return sqlSessionFactoryBean.getObject();
     }
 
     /**
@@ -78,15 +92,15 @@ public class SeataAutoConfig {
      * @Param: dataSourceProxy  datasource proxy
      * @Return: DataSourceProxy  datasource proxy
      */
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSourceProxy);
-        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources("classpath*:/mapper/*.xml"));
-        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
-        return factoryBean.getObject();
-    }
+//    @Bean
+//    public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
+//        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+//        factoryBean.setDataSource(dataSourceProxy);
+//        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
+//                .getResources("classpath*:/mapper/*.xml"));
+//        factoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
+//        return factoryBean.getObject();
+//    }
 
     /**
      * init global transaction scanner
