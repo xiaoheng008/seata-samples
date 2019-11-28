@@ -2,8 +2,6 @@ package io.seata.samples.integration.order.service;
 
 import java.util.UUID;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.seata.samples.integration.common.dto.AccountDTO;
 import io.seata.samples.integration.common.dto.OrderDTO;
@@ -12,11 +10,13 @@ import io.seata.samples.integration.common.enums.RspStatusEnum;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import io.seata.samples.integration.order.entity.TOrder;
 import io.seata.samples.integration.order.mapper.TOrderMapper;
+import org.apache.dubbo.config.annotation.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Reference(version = "1.0.0")
+    @Reference
     private AccountDubboService accountDubboService;
 
     @Autowired
@@ -85,8 +85,9 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
      * @param orderDTO
      * @return
      */
-    @Override
+
 //    @Transactional(rollbackFor = Exception.class)
+    @Override
     public ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
 

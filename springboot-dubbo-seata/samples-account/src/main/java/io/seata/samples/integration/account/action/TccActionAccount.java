@@ -11,6 +11,7 @@ import io.seata.samples.integration.common.dto.AccountDTO;
  *
  * @author zhangsen
  */
+@LocalTCC
 public interface TccActionAccount {
 
     /**

@@ -48,6 +48,7 @@
         <commons-pool2.version>2.4.2</commons-pool2.version>
         <cglib.version>3.1</cglib.version>
         <aopalliance.version>1.0</aopalliance.version>
+        <zookeeper.version>3.4.9</zookeeper.version>
         <zkclient.version>0.10</zkclient.version>
         <dubbo.registry.nacos>0.0.2</dubbo.registry.nacos>
         <spring-context-support.version>1.0.2</spring-context-support.version>

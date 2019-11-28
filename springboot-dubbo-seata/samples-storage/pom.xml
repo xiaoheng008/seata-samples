@@ -31,7 +31,7 @@
         <dependency>
             <groupId>io.seata</groupId>
             <artifactId>samples-common</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

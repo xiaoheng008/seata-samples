@@ -5,14 +5,10 @@ import com.alibaba.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication(scanBasePackages = "io.seata.samples.integration.order")
-@EnableDiscoveryClient
-@MapperScan({"io.seata.samples.integration.order.mapper"})
-@EnableDubbo(scanBasePackages = "io.seata.samples.integration.order")
+@SpringBootApplication
 @EnableTransactionManagement
 public class OrderExampleApplication {
 

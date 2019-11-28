@@ -34,36 +34,36 @@ public class SeataAutoConfig {
     /**
      * autowired datasource config
      */
-    @Autowired
-    private DataSourceProperties dataSourceProperties;
+//    @Autowired
+//    private DataSourceProperties dataSourceProperties;
 
     /**
      * init durid datasource
      *
      * @Return: druidDataSource  datasource instance
      */
-    @Bean(name = "dataSource")
-    @Primary
-    @ConfigurationProperties("spring.datasource")
-    public DataSource druidDataSource(){
-        return DruidDataSourceBuilder.create().build();
-    }
-
-    /**
-     * init datasource proxy
-     * @Param: druidDataSource  datasource bean instance
-     * @Return: DataSourceProxy  datasource proxy
-     */
+//    @Bean(name = "dataSource")
+//    @Primary
+//    @ConfigurationProperties("spring.datasource")
+//    public DataSource druidDataSource(){
+//        return DruidDataSourceBuilder.create().build();
+//    }
+//
+//    /**
+//     * init datasource proxy
+//     * @Param: druidDataSource  datasource bean instance
+//     * @Return: DataSourceProxy  datasource proxy
+//     */
 //    @Bean(name = "dataSourceProxy")
 //    public DataSourceProxy dataSourceProxy(@Qualifier("dataSource")DataSource dataSource){
 //        return new DataSourceProxy(dataSource);
 //    }
-
-    /**
-     * init mybatis sqlSessionFactory
-     * @Param: dataSourceProxy  datasource proxy
-     * @Return: DataSourceProxy  datasource proxy
-     */
+//
+//    /**
+//     * init mybatis sqlSessionFactory
+//     * @Param: dataSourceProxy  datasource proxy
+//     * @Return: DataSourceProxy  datasource proxy
+//     */
 //    @Bean
 //    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSourceProxy") DataSourceProxy dataSourceProxy) throws Exception {
 //        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
@@ -71,33 +71,22 @@ public class SeataAutoConfig {
 //        factoryBean.setTypeAliasesPackage("io.seata.samples.integration.order");
 //        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver()
 //                .getResources("classpath:mapper/*.xml"));
-////        factoryBean.setTransactionFactory(new JdbcTransactionFactory());
+//        factoryBean.setTransactionFactory(new JdbcTransactionFactory());
 //        return factoryBean.getObject();
 //    }
-
-    @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactoryBean(@Qualifier("dataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-//        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis/mybatis-config.xml"));
-        sqlSessionFactoryBean.setTypeAliasesPackage("io.seata.samples.integration.order");
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
-        return sqlSessionFactoryBean.getObject();
-    }
-
-    @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer cfg = new MapperScannerConfigurer();
-        cfg.setBasePackage("io.seata.samples.integration.order.mapper");
-        cfg.setSqlSessionFactoryBeanName("sqlSessionFactory");
-        return cfg;
-    }
-
-    @Bean("txManager")
-    public PlatformTransactionManager annotationDrivenTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
+//
+//    @Bean
+//    public MapperScannerConfigurer mapperScannerConfigurer() {
+//        MapperScannerConfigurer cfg = new MapperScannerConfigurer();
+//        cfg.setBasePackage("io.seata.samples.integration.order.mapper");
+//        cfg.setSqlSessionFactoryBeanName("sqlSessionFactory");
+//        return cfg;
+//    }
+//
+//    @Bean("txManager")
+//    public PlatformTransactionManager annotationDrivenTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
 
     /**
      * init global transaction scanner

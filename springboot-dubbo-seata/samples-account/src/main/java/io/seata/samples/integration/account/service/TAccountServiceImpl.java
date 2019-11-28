@@ -2,20 +2,20 @@ package io.seata.samples.integration.account.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import io.seata.samples.integration.account.action.TccActionAccount;
 import io.seata.samples.integration.account.entity.TAccount;
 import io.seata.samples.integration.account.mapper.TAccountMapper;
 import io.seata.samples.integration.common.dto.AccountDTO;
 import io.seata.samples.integration.common.enums.RspStatusEnum;
 import io.seata.samples.integration.common.response.ObjectResponse;
-import io.seata.spring.annotation.GlobalLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+
+//import io.seata.samples.integration.account.action.TccActionAccount;
+//import io.seata.spring.annotation.GlobalLock;
 
 /**
  * <p>
@@ -52,7 +52,7 @@ public class TAccountServiceImpl extends ServiceImpl<TAccountMapper, TAccount> i
     }
 
     @Override
-    @GlobalLock
+//    @GlobalLock
     @Transactional(rollbackFor = {Throwable.class})
     public void testGlobalLock() {
         baseMapper.testGlobalLock("1");

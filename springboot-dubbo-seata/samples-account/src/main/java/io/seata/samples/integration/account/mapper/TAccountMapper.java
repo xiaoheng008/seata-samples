@@ -19,6 +19,4 @@ public interface TAccountMapper extends BaseMapper<TAccount> {
     int testGlobalLock(@Param("userId") String userId);
 
     int insertOne(TAccount tAccount);
-
-
 }

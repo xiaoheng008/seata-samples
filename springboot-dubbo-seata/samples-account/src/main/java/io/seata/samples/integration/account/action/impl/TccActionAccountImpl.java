@@ -23,8 +23,6 @@ public class TccActionAccountImpl implements TccActionAccount {
     public boolean prepare(BusinessActionContext actionContext, AccountDTO accountDTO) {
         String xid = actionContext.getXid();
         logger.info("TccActionAccount prepare, xid:" + xid + ", accountDTO:" + JSON.toJSONString(accountDTO));
-
-        
         return true;
     }
 

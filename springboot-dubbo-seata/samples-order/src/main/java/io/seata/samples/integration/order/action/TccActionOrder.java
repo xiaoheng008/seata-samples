@@ -2,6 +2,7 @@ package io.seata.samples.integration.order.action;
 
 import io.seata.rm.tcc.api.BusinessActionContext;
 import io.seata.rm.tcc.api.BusinessActionContextParameter;
+import io.seata.rm.tcc.api.LocalTCC;
 import io.seata.rm.tcc.api.TwoPhaseBusinessAction;
 import io.seata.samples.integration.common.dto.OrderDTO;
 
@@ -10,6 +11,7 @@ import io.seata.samples.integration.common.dto.OrderDTO;
  *
  * @author zhangsen
  */
+@LocalTCC
 public interface TccActionOrder {
 
     /**
