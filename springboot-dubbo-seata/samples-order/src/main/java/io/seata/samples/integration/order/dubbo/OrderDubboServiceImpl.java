@@ -49,8 +49,8 @@ public class OrderDubboServiceImpl implements OrderDubboService {
     @Override
     public ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO) {
         System.out.println("单机事务，全局id ：" + RootContext.getXID());
-        return orderService.createOrder2(orderDTO);
-//        return null;
+//        return orderService.createOrder2(orderDTO);
+        return null;
     }
 
     @Override

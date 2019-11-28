@@ -5,8 +5,8 @@ import io.seata.samples.integration.common.dto.CommodityDTO;
 import io.seata.samples.integration.common.dubbo.StorageDubboService;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import io.seata.samples.integration.storage.service.ITStorageService;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @Author: heshouyou

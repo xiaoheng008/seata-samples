@@ -28,8 +28,8 @@ public class TOrderController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TOrderController.class);
 
 
-//    @Autowired
-//    private ITOrderService orderService;
+    @Autowired
+    private ITOrderService orderService;
 
     @PostMapping("/create_order")
     ObjectResponse<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
