@@ -3,7 +3,7 @@
 projectDir="/Users/xiaoheng/IdeaProjects/seata-samples/springboot-dubbo-seata"
 echo $projectDir
 
-url="ubuntu-linux3"
+url="htcc01"
 serviceName="xiaoheng@${url}"
 
 serverDir="${serviceName}:/home/xiaoheng"

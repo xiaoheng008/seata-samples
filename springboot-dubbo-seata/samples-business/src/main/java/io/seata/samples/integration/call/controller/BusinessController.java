@@ -50,7 +50,6 @@ public class BusinessController {
             if(!buyReq.isFlag()){
                 LOGGER.error("请求失败：{}",e);
             }
-
         }
 
         long use = System.currentTimeMillis() - start;
