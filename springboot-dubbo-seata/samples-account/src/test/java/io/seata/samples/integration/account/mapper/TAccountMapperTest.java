@@ -28,4 +28,5 @@ public class TAccountMapperTest extends ServiceImpl<TAccountMapper, TAccount> {
         }
 
     }
+
 }

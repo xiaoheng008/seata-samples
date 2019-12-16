@@ -1,6 +1,7 @@
 package io.seata.samples.integration.common.dubbo;
 
 import io.seata.samples.integration.common.dto.AccountDTO;
+import io.seata.samples.integration.common.dto.GoodOrder;
 import io.seata.samples.integration.common.response.ObjectResponse;
 
 /**
@@ -15,5 +16,5 @@ public interface AccountDubboService {
      */
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
 
-    ObjectResponse tccDecreaseAccount(AccountDTO accountDTO);
+    void tccDecreaseAccount(GoodOrder goodOrder);
 }

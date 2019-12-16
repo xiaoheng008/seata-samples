@@ -1,5 +1,6 @@
 package io.seata.samples.integration.common.dubbo;
 
+import io.seata.samples.integration.common.dto.GoodOrder;
 import io.seata.samples.integration.common.dto.OrderDTO;
 import io.seata.samples.integration.common.response.ObjectResponse;
 
@@ -18,6 +19,6 @@ public interface OrderDubboService {
 
     ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO);
 
-    ObjectResponse<OrderDTO> tccCreateOrder(OrderDTO orderDTO);
+    GoodOrder tccGoodOrder(GoodOrder goodOrder);
 
 }

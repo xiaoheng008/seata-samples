@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.seata.samples.integration.account.mapper.WalletDao">
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="io.seata.samples.integration.account.entity.WalletPO" useGeneratedKeys="false" >
+        insert into t_wallet (uid,balance,create_time,update_time) values (#{uid},#{balance},#{createTime},#{updateTime})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="io.seata.samples.integration.account.entity.WalletPO">
+        update t_wallet set balance=#{balance},update_time=#{updateTime} where uid=#{uid}
+    </update>
+
+    <!-- 根据主键读取记录（主键可能有多个） -->
+    <select id="get" parameterType="map" resultType="io.seata.samples.integration.account.entity.WalletPO">
+        SELECT * FROM t_wallet WHERE uid=#{uid}
+    </select>
+
+
+    <update id="sub" parameterType="map">
+        update t_wallet
+        set balance = balance - #{amount},update_time = unix_timestamp()
+        where uid = #{uid}
+        and balance >= #{amount}
+    </update>
+
+    <update id="add" parameterType="map">
+        update t_wallet
+        set balance = balance + #{amount},update_time = unix_timestamp()
+        where uid = #{uid}
+    </update>
+
+</mapper>

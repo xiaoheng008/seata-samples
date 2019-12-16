@@ -3,6 +3,7 @@ package io.seata.samples.integration.call.controller;
 import io.seata.samples.integration.call.service.BusinessService;
 import io.seata.samples.integration.call.service.CountService;
 import io.seata.samples.integration.common.dto.BusinessDTO;
+import io.seata.samples.integration.common.dto.BuyReq;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -36,8 +37,27 @@ public class BusinessController {
     private CountService countService;
 
     @PostMapping("/tccbuy")
-    public ObjectResponse tcc(@RequestBody BusinessDTO businessDTO) {
-        ObjectResponse objectResponse = tccBusinessService.handleBusiness(businessDTO);
+    public ObjectResponse tcc(@RequestBody BuyReq buyReq) {
+        long start = System.currentTimeMillis();
+        ObjectResponse objectResponse = new ObjectResponse();
+
+        try {
+            objectResponse = tccBusinessService.buy(buyReq);
+//            countService.success(System.currentTimeMillis() - start);
+        }catch (Exception e) {
+//            countService.failure(System.currentTimeMillis() - start);
+            //如果不会滚的情况下报错了，要打印
+            if(!buyReq.isFlag()){
+                LOGGER.error("请求失败：{}",e);
+            }
+
+        }
+
+        long use = System.currentTimeMillis() - start;
+        objectResponse.setOthenTime(objectResponse.getTime());
+        objectResponse.setTime(use);
+        LOGGER.info("分布式事务执行时间: {}, flag: {}", use, buyReq.isFlag());
+
         return objectResponse;
     }
 

@@ -4,8 +4,11 @@ package io.seata.samples.integration.account.dubbo;
 import io.seata.core.context.RootContext;
 import io.seata.rm.tcc.api.BusinessActionContext;
 import io.seata.samples.integration.account.action.TccActionAccount;
+import io.seata.samples.integration.account.action.WalletAction;
 import io.seata.samples.integration.account.service.ITAccountService;
 import io.seata.samples.integration.common.dto.AccountDTO;
+import io.seata.samples.integration.common.dto.GoodOrder;
+import io.seata.samples.integration.common.dto.OrderDTO;
 import io.seata.samples.integration.common.dubbo.AccountDubboService;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import org.apache.dubbo.config.annotation.Reference;
@@ -27,6 +30,9 @@ public class AccountDubboServiceImpl implements AccountDubboService {
     @Autowired
     private TccActionAccount tccActionAccount;
 
+    @Autowired
+    private WalletAction walletAction;
+
     @Override
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         System.out.println("全局事务id ：" + RootContext.getXID());
@@ -35,10 +41,7 @@ public class AccountDubboServiceImpl implements AccountDubboService {
     }
 
     @Override
-    public ObjectResponse tccDecreaseAccount(AccountDTO accountDTO) {
-        BusinessActionContext businessActionContext = new BusinessActionContext();
-        businessActionContext.setXid(RootContext.getXID());
-        tccActionAccount.prepare(businessActionContext, accountDTO);
-        return null;
+    public void tccDecreaseAccount(GoodOrder goodOrder) {
+        walletAction.prepare(null, goodOrder.getUid(), goodOrder.getAmount(), goodOrder.getOrderId());
     }
 }

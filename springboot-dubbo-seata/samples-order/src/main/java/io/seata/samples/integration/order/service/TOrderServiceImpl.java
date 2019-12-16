@@ -34,8 +34,8 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
     @Reference
     private AccountDubboService accountDubboService;
 
-//    @Autowired
-//    private ITAccountService itAccountService;
+    @Autowired
+    private ITAccountService itAccountService;
 
     private boolean flag;
 
@@ -86,7 +86,7 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
      * @return
      */
 
-//    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
@@ -104,13 +104,13 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setUserId(orderDTO.getUserId());
         accountDTO.setAmount(orderDTO.getOrderAmount());
-//        ObjectResponse objectResponse = itAccountService.decreaseAccount(accountDTO);
+        ObjectResponse objectResponse = itAccountService.decreaseAccount(accountDTO);
 
-//        if (objectResponse.getStatus() != 200) {
-//            response.setStatus(RspStatusEnum.FAIL.getCode());
-//            response.setMessage(RspStatusEnum.FAIL.getMessage());
-//            return response;
-//        }
+        if (objectResponse.getStatus() != 200) {
+            response.setStatus(RspStatusEnum.FAIL.getCode());
+            response.setMessage(RspStatusEnum.FAIL.getMessage());
+            return response;
+        }
 
         //打开注释测试事务发生异常后，全局回滚功能
         if (orderDTO.isFlag()) {

@@ -3,10 +3,15 @@ package io.seata.samples.integration.call.service;
 
 import io.seata.core.context.RootContext;
 import io.seata.samples.integration.common.dto.BusinessDTO;
+import io.seata.samples.integration.common.dto.BuyReq;
+import io.seata.samples.integration.common.dto.GoodOrder;
 import io.seata.samples.integration.common.dto.OrderDTO;
+import io.seata.samples.integration.common.dubbo.AccountDubboService;
 import io.seata.samples.integration.common.dubbo.OrderDubboService;
 import io.seata.samples.integration.common.dubbo.StorageDubboService;
+import io.seata.samples.integration.common.exception.ServiceException;
 import io.seata.samples.integration.common.response.ObjectResponse;
+import io.seata.samples.integration.common.utils.TimeUtil;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.Reference;
 import org.slf4j.Logger;
@@ -30,7 +35,9 @@ public class TccBusinessServiceImpl implements BusinessService {
     @Reference
     private OrderDubboService orderDubboService;
 
-    private boolean flag;
+    @Reference
+    private AccountDubboService accountDubboService;
+
 
     @Override
     @GlobalTransactional()
@@ -44,13 +51,45 @@ public class TccBusinessServiceImpl implements BusinessService {
         orderDTO.setOrderAmount(businessDTO.getAmount());
         orderDTO.setFlag(businessDTO.isFlag());
 
-        ObjectResponse<OrderDTO> orderDTOObjectResponse = orderDubboService.tccCreateOrder(orderDTO);
+//        ObjectResponse<OrderDTO> orderDTOObjectResponse = orderDubboService.tccGoodOrder(new GoodOrder());
 
-        return orderDTOObjectResponse;
+        return null;
     }
 
     @Override
     public ObjectResponse handleBusiness2(BusinessDTO businessDTO) {
         return null;
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 3000)
+    public ObjectResponse buy(BuyReq buyReq) {
+        GoodOrder goodOrder = new GoodOrder();
+        goodOrder.setFlag(buyReq.isFlag());
+        goodOrder.setUid(buyReq.getUid());
+        goodOrder.setGoodId(buyReq.getGoodId());
+        goodOrder.setNumber(buyReq.getNum());
+        goodOrder.setPrice(buyReq.getPrice());
+
+        long t1 = System.currentTimeMillis();
+
+        GoodOrder order = orderDubboService.tccGoodOrder(goodOrder);
+
+
+        accountDubboService.tccDecreaseAccount(order);
+
+        long t2 = System.currentTimeMillis();
+
+        if(buyReq.isFlag()) {
+            throw new ServiceException("主动抛出异常");
+        }
+
+        ObjectResponse objectResponse = new ObjectResponse();
+        objectResponse.setData(order);
+        objectResponse.setStatus(0);
+        objectResponse.setMessage("success");
+        objectResponse.setTime(t2 - t1);
+
+        return objectResponse;
     }
 }

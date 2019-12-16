@@ -11,12 +11,23 @@ public class ObjectResponse<T> extends BaseResponse implements Serializable {
 
     private long time;
 
+
+    private long othenTime;
+
     public long getTime() {
         return time;
     }
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public long getOthenTime() {
+        return othenTime;
+    }
+
+    public void setOthenTime(long othenTime) {
+        this.othenTime = othenTime;
     }
 
     public ObjectResponse() { }

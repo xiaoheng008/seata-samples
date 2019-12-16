@@ -3,10 +3,13 @@
 projectDir="/Users/xiaoheng/IdeaProjects/seata-samples/springboot-dubbo-seata"
 echo $projectDir
 
-serverDir="xiaoheng@ubuntu-linux:/home/xiaoheng"
+url="ubuntu-linux3"
+serviceName="xiaoheng@${url}"
+
+serverDir="${serviceName}:/home/xiaoheng"
 echo $serverDir
 
-ssh2Server="ssh xiaoheng@ubuntu-linux"
+ssh2Server="ssh ${serviceName}"
 
 mavenUrl="http://nexus3.51hanwan.com/repository/hwm-hosted/"
 echo $mavenUrl

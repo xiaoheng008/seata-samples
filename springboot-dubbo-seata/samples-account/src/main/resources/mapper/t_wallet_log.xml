@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.seata.samples.integration.account.mapper.WalletLogDao">
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="io.seata.samples.integration.account.entity.WalletLogPO" useGeneratedKeys="false" >
+        insert into t_wallet_log (log_id,uid,amount,before_amount,after_amount,oper,status,source,order_id,create_time,update_time) values (#{logId},#{uid},#{amount},#{beforeAmount},#{afterAmount},#{oper},#{status},#{source},#{orderId},#{createTime},#{updateTime})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="io.seata.samples.integration.account.entity.WalletLogPO">
+        update t_wallet_log set uid=#{uid},amount=#{amount},before_amount=#{beforeAmount},after_amount=#{afterAmount},oper=#{oper},status=#{status},source=#{source},order_id=#{orderId},update_time=#{updateTime} where log_id=#{logId}
+    </update>
+
+    <!-- 根据主键读取记录（主键可能有多个） -->
+    <select id="get" parameterType="map" resultType="io.seata.samples.integration.account.entity.WalletLogPO">
+        SELECT * FROM t_wallet_log WHERE log_id=#{logId}
+    </select>
+
+    <select id="getBySourceAndOrderId" parameterType="map" resultType="io.seata.samples.integration.account.entity.WalletLogPO">
+        select * from t_wallet_log
+        where source = #{source}
+        and order_id = #{orderId}
+    </select>
+
+    <update id="updateByStatus" parameterType="map">
+        update t_wallet_log
+        set status = #{status},
+        update_time = unix_timestamp()
+        where log_id=#{logId}
+        and status=#{oldStatus}
+    </update>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.seata.samples.integration.storage.mapper.GoodLogDao">
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="io.seata.samples.integration.storage.entity.GoodLogPO" useGeneratedKeys="false" >
+        insert into t_good_log (log_id,good_id,number,before_number,after_number,oper,status,source,order_id,create_time,update_time) values (#{logId},#{goodId},#{number},#{beforeNumber},#{afterNumber},#{oper},#{status},#{source},#{orderId},#{createTime},#{updateTime})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="io.seata.samples.integration.storage.entity.GoodLogPO">
+        update t_good_log set good_id=#{goodId},number=#{number},before_number=#{beforeNumber},after_number=#{afterNumber},oper=#{oper},status=#{status},source=#{source},order_id=#{orderId},update_time=#{updateTime} where log_id=#{logId}
+    </update>
+
+    <!-- 根据主键读取记录（主键可能有多个） -->
+    <select id="get" parameterType="map" resultType="io.seata.samples.integration.storage.entity.GoodLogPO">
+        SELECT * FROM t_good_log WHERE log_id=#{logId}
+    </select>
+
+</mapper>

@@ -1,6 +1,7 @@
 package io.seata.samples.integration.call.service;
 
 import io.seata.samples.integration.common.dto.BusinessDTO;
+import io.seata.samples.integration.common.dto.BuyReq;
 import io.seata.samples.integration.common.response.ObjectResponse;
 
 /**
@@ -13,4 +14,6 @@ public interface BusinessService {
     ObjectResponse handleBusiness(BusinessDTO businessDTO);
 
     ObjectResponse handleBusiness2(BusinessDTO businessDTO);
+
+    ObjectResponse buy(BuyReq buyReq);
 }

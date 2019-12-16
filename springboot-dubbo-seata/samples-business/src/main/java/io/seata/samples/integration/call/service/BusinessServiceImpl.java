@@ -3,6 +3,7 @@ package io.seata.samples.integration.call.service;
 
 import io.seata.core.context.RootContext;
 import io.seata.samples.integration.common.dto.BusinessDTO;
+import io.seata.samples.integration.common.dto.BuyReq;
 import io.seata.samples.integration.common.dto.OrderDTO;
 import io.seata.samples.integration.common.dubbo.OrderDubboService;
 import io.seata.samples.integration.common.dubbo.StorageDubboService;
@@ -25,10 +26,10 @@ public class BusinessServiceImpl implements BusinessService{
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Reference(version = "1.0.0")
+    @Reference
     private StorageDubboService storageDubboService;
 
-    @Reference(version = "1.0.0")
+    @Reference
     private OrderDubboService orderDubboService;
 
     private boolean flag;
@@ -39,7 +40,7 @@ public class BusinessServiceImpl implements BusinessService{
      * @Return:
      */
     @Override
-    @GlobalTransactional(timeoutMills = 10000, name = "dubbo-gts-seata-example")
+    @GlobalTransactional(timeoutMills = 10000)
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         System.out.println("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
@@ -90,7 +91,6 @@ public class BusinessServiceImpl implements BusinessService{
      * @Return:
      */
     @Override
-    @GlobalTransactional(timeoutMills = 10000, name = "dubbo-gts-seata-example")
     public ObjectResponse handleBusiness2(BusinessDTO businessDTO) {
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
 
@@ -113,5 +113,10 @@ public class BusinessServiceImpl implements BusinessService{
         objectResponse.setMessage(RspStatusEnum.SUCCESS.getMessage());
         objectResponse.setData(response.getData());
         return objectResponse;
+    }
+
+    @Override
+    public ObjectResponse buy(BuyReq buyReq) {
+        return null;
     }
 }

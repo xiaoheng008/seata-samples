@@ -1,24 +1,26 @@
 package io.seata.samples.integration.order.dubbo;
 
 
+import com.alibaba.fastjson.JSON;
 import io.seata.core.context.RootContext;
-import io.seata.rm.tcc.api.BusinessActionContext;
-import io.seata.samples.integration.common.dto.AccountDTO;
 import io.seata.samples.integration.common.dto.OrderDTO;
 import io.seata.samples.integration.common.dubbo.AccountDubboService;
 import io.seata.samples.integration.common.dubbo.OrderDubboService;
 import io.seata.samples.integration.common.response.ObjectResponse;
+import io.seata.samples.integration.common.utils.BeanCopyUtil;
+import io.seata.samples.integration.order.action.OrderAction;
 import io.seata.samples.integration.order.action.TccActionOrder;
-import io.seata.samples.integration.order.entity.TOrder;
+import io.seata.samples.integration.common.dto.GoodOrder;
+import io.seata.samples.integration.order.entity.GoodOrderPO;
+import io.seata.samples.integration.order.service.GoodOrderService;
 import io.seata.samples.integration.order.service.ITOrderService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * @Author: heshouyou
@@ -39,6 +41,12 @@ public class OrderDubboServiceImpl implements OrderDubboService {
     @Reference
     private AccountDubboService accountDubboService;
 
+    @Autowired
+    private OrderAction orderAction;
+
+    @Autowired
+    private GoodOrderService goodOrderService;
+
     @Override
     public ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO) {
         System.out.println("全局事务id ：" + RootContext.getXID());
@@ -49,39 +57,29 @@ public class OrderDubboServiceImpl implements OrderDubboService {
     @Override
     public ObjectResponse<OrderDTO> createOrder2(OrderDTO orderDTO) {
         System.out.println("单机事务，全局id ：" + RootContext.getXID());
-//        return orderService.createOrder2(orderDTO);
-        return null;
+        return orderService.createOrder2(orderDTO);
     }
 
+    /**
+     * 走tcc的下单流程
+     *
+     * @param goodOrder
+     * @return
+     */
     @Override
-    public ObjectResponse<OrderDTO> tccCreateOrder(OrderDTO orderDTO) {
+    public GoodOrder tccGoodOrder(GoodOrder goodOrder) {
         ObjectResponse<OrderDTO> objectObjectResponse = new ObjectResponse<>();
 
-        BusinessActionContext businessActionContext = new BusinessActionContext();
-        businessActionContext.setXid(RootContext.getXID());
+        GoodOrderPO order = goodOrderService.createOrder(goodOrder.getUid(), goodOrder.getGoodId(), goodOrder.getNumber(),
+                goodOrder.getPrice());
 
-        tccActionOrder.prepare(businessActionContext, orderDTO);
-
-        //生成订单号
-        orderDTO.setOrderNo(UUID.randomUUID().toString().replace("-", ""));
-        //生成订单
-        TOrder tOrder = new TOrder();
-        BeanUtils.copyProperties(orderDTO, tOrder);
-        tOrder.setCount(orderDTO.getOrderCount());
-        tOrder.setAmount(orderDTO.getOrderAmount().doubleValue());
-        //生成订单
-
-        //扣减用户账户
-        AccountDTO accountDTO = new AccountDTO();
-        accountDTO.setUserId(orderDTO.getUserId());
-        accountDTO.setAmount(orderDTO.getOrderAmount());
-        accountDubboService.tccDecreaseAccount(accountDTO);
-
-        if (orderDTO.isFlag()) {
-            logger.error("OrderDubboServiceImpl#tccCrearteOrder | 主动抛出异常");
-            throw new RuntimeException("tcc throw Exception");
-        }
-
-        return objectObjectResponse;
+        // TODO: 2019-11-28 获取商品价格
+        long t1 = System.currentTimeMillis();
+        orderAction.prepare(null, order.getOrderId());
+        long t2 = System.currentTimeMillis();
+        GoodOrder copy = BeanCopyUtil.copy(order, GoodOrder.class);
+        long t3 = System.currentTimeMillis();
+        logger.info("orderAction#prepare | 1: {}, 2: {}, all: {}", t2-t1, t3-t2, t3-t1);
+        return copy;
     }
 }

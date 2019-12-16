@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.seata.samples.integration.order.mapper.GoodOrderDao">
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="io.seata.samples.integration.order.entity.GoodOrderPO" useGeneratedKeys="true" keyColumn="order_id" keyProperty="orderId" >
+        insert into t_good_order (order_id,uid,good_id,number,price,amount,status,remark,create_time,update_time)
+        values (#{orderId},#{uid},#{goodId},#{number},#{price},#{amount},#{status},#{remark},#{createTime},#{updateTime})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="io.seata.samples.integration.order.entity.GoodOrderPO">
+        update t_good_order set uid=#{uid},good_id=#{goodId},number=#{number},price=#{price},amount=#{amount},status=#{status},remark=#{remark},update_time=#{updateTime} where order_id=#{orderId}
+    </update>
+
+    <!-- 根据主键读取记录（主键可能有多个） -->
+    <select id="get" parameterType="map" resultType="io.seata.samples.integration.order.entity.GoodOrderPO">
+        SELECT * FROM t_good_order WHERE order_id=#{orderId}
+    </select>
+
+    <update id="updateStatus" parameterType="map">
+        update t_good_order
+        set status = #{status} ,update_time = unix_timestamp()
+        where order_id=#{orderId}
+        and status = #{oldStatus}
+    </update>
+
+</mapper>
