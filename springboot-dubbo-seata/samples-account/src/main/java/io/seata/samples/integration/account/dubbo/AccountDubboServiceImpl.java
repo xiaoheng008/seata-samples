@@ -6,6 +6,7 @@ import io.seata.rm.tcc.api.BusinessActionContext;
 import io.seata.samples.integration.account.action.TccActionAccount;
 import io.seata.samples.integration.account.action.WalletAction;
 import io.seata.samples.integration.account.service.ITAccountService;
+import io.seata.samples.integration.account.service.WalletService;
 import io.seata.samples.integration.common.dto.AccountDTO;
 import io.seata.samples.integration.common.dto.GoodOrder;
 import io.seata.samples.integration.common.dto.OrderDTO;
@@ -33,6 +34,9 @@ public class AccountDubboServiceImpl implements AccountDubboService {
     @Autowired
     private WalletAction walletAction;
 
+    @Autowired
+    private WalletService walletService;
+
     @Override
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         System.out.println("全局事务id ：" + RootContext.getXID());
@@ -43,5 +47,9 @@ public class AccountDubboServiceImpl implements AccountDubboService {
     @Override
     public void tccDecreaseAccount(GoodOrder goodOrder) {
         walletAction.prepare(null, goodOrder.getUid(), goodOrder.getAmount(), goodOrder.getOrderId());
+    }
+
+    public void createWallet(long uid, long balance) {
+        walletService.create(uid, balance);
     }
 }

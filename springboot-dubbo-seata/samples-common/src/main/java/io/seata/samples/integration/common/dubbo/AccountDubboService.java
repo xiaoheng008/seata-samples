@@ -17,4 +17,6 @@ public interface AccountDubboService {
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
 
     void tccDecreaseAccount(GoodOrder goodOrder);
+
+    void createWallet(long uid, long balance);
 }

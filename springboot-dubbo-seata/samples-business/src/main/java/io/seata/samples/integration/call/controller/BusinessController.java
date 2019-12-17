@@ -4,8 +4,11 @@ import io.seata.samples.integration.call.service.BusinessService;
 import io.seata.samples.integration.call.service.CountService;
 import io.seata.samples.integration.common.dto.BusinessDTO;
 import io.seata.samples.integration.common.dto.BuyReq;
+import io.seata.samples.integration.common.dto.WalletAdd;
+import io.seata.samples.integration.common.dubbo.AccountDubboService;
 import io.seata.samples.integration.common.response.ObjectResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class BusinessController {
 
     @Autowired
     private BusinessService tccBusinessService;
+
+    @Reference
+    private AccountDubboService accountDubboService;
 
     @Autowired
     private CountService countService;
@@ -121,6 +127,12 @@ public class BusinessController {
     public ObjectResponse test(@RequestBody BusinessDTO businessDTO){
         LOGGER.info("请求参数：{}",businessDTO.toString());
 
+        return new ObjectResponse();
+    }
+
+    @PostMapping("addWallet")
+    public ObjectResponse addWallet(@RequestBody WalletAdd walletAdd) {
+        accountDubboService.createWallet(walletAdd.getUid(), walletAdd.getBalance());
         return new ObjectResponse();
     }
 }
