@@ -3,7 +3,7 @@
 projectDir="/Users/xiaoheng/IdeaProjects/seata-samples/springboot-dubbo-seata"
 echo $projectDir
 
-url="htcc01"
+url="htcc03"
 serviceName="xiaoheng@${url}"
 
 serverDir="${serviceName}:/home/xiaoheng"
@@ -15,7 +15,6 @@ mavenUrl="http://nexus3.51hanwan.com/repository/hwm-hosted/"
 echo $mavenUrl
 mavenLocalDir="/Users/xiaoheng/.m2/repository/com/pita"
 echo $mavenLocalDir
-
 
 businessFun(){
     echo "创建远程目录"
